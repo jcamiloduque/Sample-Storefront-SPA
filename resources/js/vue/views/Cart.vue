@@ -1,41 +1,57 @@
 <template>
     <div class="cart">
-        <ul class="breadcrumb">
-            <li><router-link to="/">Home</router-link></li>
-            <li>Cart</li>
-        </ul>
+        <h3>Shopping Cart</h3>
         <div class="container">
-            <template v-if="hasProducts">
-                <div class="t-container">
+            <div>
+                <template v-if="hasProducts">
                     <table>
                         <tr>
                             <th>Product</th>
-                            <th>Price</th>
                             <th>Quantity</th>
+                            <th>Total</th>
+                            <th>Action</th>
                         </tr>
                         <cart-list @update="updated" />
+                        <tr>
+                            <td colspan="4" class="tlt">
+                                <table>
+                                    <tr>
+                                        <td>Cart Overview</td>
+                                        <td></td>
+                                    </tr>
+                                    <tr>
+                                        <td>Subtotal</td>
+                                        <td>{{total}}</td>
+                                    </tr>
+                                    <tr>
+                                        <td>Total</td>
+                                        <td>{{total}} CAD</td>
+                                    </tr>
+                                </table>
+                            </td>
+                        </tr>
                     </table>
-                </div>
-                <div class="total">
-                    <div class="continue">
+                    <div class="total">
+                        <div class="continue">
+                            <router-link to="/" class="cnt">Continue shopping</router-link>
+                        </div>
+                        <div class="tlt">
+                            Subtotal <br>
+                            <small>Shipping & taxes calculated at checkout</small>
+                        </div>
+                        <div class="_t">
+                            {{total}}
+                        </div>
+                        <div class="chout">
+                            <button class="dark">Checkout ({{total}})</button>
+                        </div>
+                    </div>
+                </template>
+                <div v-if="!hasProducts" class="empty">
+                    Looks like your cart is empty
+                    <div>
                         <button class="gray" @click="$router.push('/')">Continue shopping</button>
                     </div>
-                    <div class="tlt">
-                        Subtotal <br>
-                        <small>Shipping & taxes calculated at checkout</small>
-                    </div>
-                    <div class="_t">
-                        {{total}}
-                    </div>
-                    <div class="chout">
-                        <button class="dark">Checkout </button>
-                    </div>
-                </div>
-            </template>
-            <div v-if="!hasProducts" class="empty">
-                Looks like your cart is empty
-                <div>
-                    <button class="gray" @click="$router.push('/')">Continue shopping</button>
                 </div>
             </div>
         </div>
@@ -81,6 +97,7 @@ export default {
 
 <style scoped lang="scss">
 .cart{
+    background: #f6f6f6;
     display: flex;
     flex-direction: column;
     .t-container{
@@ -98,22 +115,36 @@ export default {
             margin-top: 40px;
         }
     }
+    .cnt{
+        text-transform: uppercase;
+        text-decoration: none;
+        letter-spacing: 1px;
+        font-size: 0.8em;
+        color: var(--font-colour);
+        border-bottom: 1px solid;
+        padding-bottom: 3px;
+    }
     .container{
         flex: 1;
         display: flex;
         flex-direction: column;
-
+        background: white !important;
+        max-width: 800px !important;
+        >div{
+            padding: 100px 70px;
+        }
     }
-    table{
+    div >table{
         width: 100%;
         overflow: hidden;
         border-collapse: collapse;
 
         ::v-deep{
-            tr{
+            >tr{
                 >th{
-                    background: #f7f9fa;
                     color: #88929b;
+                    text-transform: uppercase;
+                    font-size: 0.8em;
                 }
                 >*{
                     border-bottom: 1px solid #adb6b9;
@@ -124,10 +155,32 @@ export default {
                     &:last-child{
                         text-align: right !important;
                     }
+                    &.tlt{
+                        text-align: right;
+                    }
+                }
+            }
+        }
+
+        table{
+            margin-left: auto;
+            min-width: 50%;
+            text-transform: uppercase;
+            color: #b6b0ab;
+            font-size: 0.8em;
+            tr{
+                td{
+                    font-weight: bold;
+                    &:first-child{
+                        font-weight: bold;
+                        text-align: left;
+                    }
                 }
                 &:last-child{
-                    >*{
-                        border-bottom: none;
+                    td{
+                        &:last-child{
+                            color: #555150;
+                        }
                     }
                 }
             }
@@ -143,16 +196,21 @@ export default {
             display: flex;
             align-items: center;
         }
+        .continue{
+            flex: 1;
+        }
         .tlt{
             width: 70%;
             flex-direction: column;
             align-items: stretch;
             text-align: right;
             margin-right: 30px;
+            display: none;
         }
         ._t{
             width: 30%;
             font-weight: bold;
+            display: none;
         }
     }
 }

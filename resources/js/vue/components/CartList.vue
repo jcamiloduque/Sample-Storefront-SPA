@@ -5,10 +5,12 @@
                 <cart-item :product="product.product" :quantity="product.quantity" :alone="false" />
             </td>
             <td>
-                {{toMoney(product.product.price)}}
+                <quantity v-model="product.quantity" @update:modelValue="(q)=>updateQuantity(product, q)" />
             </td>
             <td>
-                <quantity v-model="product.quantity" @update:modelValue="(q)=>updateQuantity(product, q)" />
+                {{toMoney(product.product.price * product.quantity)}}
+            </td>
+            <td>
                 <i class="fa-solid fa-times" @click="remove(product)"></i>
             </td>
         </template>
